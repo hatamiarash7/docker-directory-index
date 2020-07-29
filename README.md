@@ -1,6 +1,6 @@
 # docker-directory-index
 
-This image use Nginx to get a directory index.
+This image use Nginx to create a directory index
 
 ![image](https://www.keycdn.com/img/support/nginx-directory-index-lg.webp)
 
