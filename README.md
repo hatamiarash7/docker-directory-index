@@ -11,5 +11,5 @@ This image use Nginx to create a directory index
 Map your directory to `/data` directory in container
 
 ```bash
-docker run -p 80:80 -v /var/logs:/data hatamiarash7/directory-index
+docker run -p 80:80 -v /var/log:/data hatamiarash7/directory-index
 ```
