@@ -1,0 +1,17 @@
+server {
+    listen       80;
+    server_tokens off;
+ 
+    location = /health {
+        types {}
+        default_type text/plain;
+        return 200 "OK";
+    }
+    
+    location / {
+       alias /data/;
+       expires -1;
+       autoindex on;
+       default_type text/plain;
+    }
+}
