@@ -1,4 +1,4 @@
-FROM nginx:stable-alpine
+FROM nginx:stable
 
 LABEL maintainer="hatamiarash7@gmail.com"
 
