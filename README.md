@@ -18,6 +18,8 @@ docker run -p 80:80 -v /var/log:/data hatamiarash7/directory-index
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D1WGU9)
 
+<div><a href="https://payping.ir/@hatamiarash7"><img src="https://cdn.payping.ir/statics/Payping-logo/Trust/blue.svg" height="128" width="128"></a></div>
+
 ## Contributing
 
 1. Fork it!
