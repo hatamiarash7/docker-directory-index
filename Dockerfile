@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM nginx:1.20
 
 LABEL maintainer="hatamiarash7@gmail.com"
 
