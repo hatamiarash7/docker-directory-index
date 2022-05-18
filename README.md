@@ -1,6 +1,6 @@
 # Directory Index
 
-[![GitHub license](https://img.shields.io/github/license/hatamiarash7/docker-directory-index)](https://github.com/hatamiarash7/docker-directory-index/blob/master/LICENSE) ![Github](https://github.com/hatamiarash7/docker-directory-index/workflows/Github/badge.svg?branch=master) ![Dockerhub](https://github.com/hatamiarash7/docker-directory-index/workflows/Dockerhub/badge.svg?branch=master) ![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/hatamiarash7/directory-index)
+[![GitHub license](https://img.shields.io/github/license/hatamiarash7/docker-directory-index)](https://github.com/hatamiarash7/docker-directory-index/blob/master/LICENSE) ![Docker](https://github.com/hatamiarash7/docker-directory-index/workflows/Docker/badge.svg?branch=master) ![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/hatamiarash7/directory-index)
 
 This image use Nginx to create a directory index
 
