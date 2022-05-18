@@ -9,7 +9,7 @@ on:
 
 env:
   IMAGE_NAME: hatamiarash7/directory-index:latest
-  TEST_IMAGE_NAME: localhost:5000/$IMAGE_NAME
+  TEST_IMAGE_NAME: localhost:5000/${{ env.IMAGE_NAME }}
 
 jobs:
   test:
