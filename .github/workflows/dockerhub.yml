@@ -14,13 +14,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    env:
-      TEST_IMAGE_NAME: localhost:5000/test:latest
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
 
     steps:
       - name: Cancel previous workflow
@@ -28,24 +21,15 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Set up Docker Build
-        uses: docker/setup-buildx-action@v1
-        with:
-          driver-opts: network=host
-
-      - name: Build and push to local registry
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: "${{ env.TEST_IMAGE_NAME }}"
+      - name: Build image
+        run: docker build -t test .
 
       - name: Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.TEST_IMAGE_NAME }}
+          image-ref: test
           format: "template"
           template: "@/contrib/sarif.tpl"
           output: "trivy-results.sarif"
@@ -68,9 +52,6 @@ jobs:
       - name: Get Current Date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
-      - name: Build image
-        run: docker build . --file Dockerfile --tag ${{ env.IMAGE_NAME }}
 
       - name: Build image
         run: >
