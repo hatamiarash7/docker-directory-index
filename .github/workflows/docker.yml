@@ -52,7 +52,7 @@ jobs:
       - name: Lint Docker files
         uses: hadolint/hadolint-action@v2.1.0
         with:
-          dockerfile: "Applications/consumer/Dockerfile"
+          dockerfile: "Dockerfile"
           recursive: true
           verbose: true
           ignore: "DL3008,DL3025"
