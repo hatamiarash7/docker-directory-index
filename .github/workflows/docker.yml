@@ -1,14 +1,24 @@
-name: Dockerhub
+name: Docker
 
 on:
-  schedule:
-    - cron: "0 2 * * *"
   push:
     branches:
       - master
+    paths:
+      - "Dockerfile"
+      - "default.conf.template"
+      - ".github/workflows/docker.yml"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "Dockerfile"
+      - "default.conf.template"
+      - ".github/workflows/docker.yml"
 
 env:
-  IMAGE_NAME: hatamiarash7/directory-index:latest
+  IMAGE_NAME: hatamiarash7/directory-index
+  GITHUB_IMAGE_NAME: ${{ github.repository }}/directory-index
 
 jobs:
   test:
@@ -39,15 +49,29 @@ jobs:
         with:
           sarif_file: "trivy-results.sarif"
 
+      - name: Lint Docker files
+        uses: hadolint/hadolint-action@v2.1.0
+        with:
+          dockerfile: "Applications/consumer/Dockerfile"
+          recursive: true
+          verbose: true
+          ignore: "DL3008,DL3025"
+
   push:
     name: Deploy
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name != 'pull_request'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Create image name
+        id: github-image
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ghcr.io/${{ env.GITHUB_IMAGE_NAME }}
 
       - name: Get Current Date
         id: date
@@ -57,13 +81,17 @@ jobs:
         run: >
           docker build
           -t ${{ env.IMAGE_NAME }}
+          -t ${{ steps.github-image.outputs.lowercase }}
           --build-arg DATE_CREATED=${{ steps.date.outputs.date }}
           -f Dockerfile
           .
 
-      - name: Log into registry
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
+      - name: Push to Dockerhub
         run: |
+          docker login -u hatamiarash7 -p "${{ secrets.DOCKERHUB_TOKEN }}"
           docker push ${{ env.IMAGE_NAME }}
+
+      - name: Push to Github
+        run: |
+          docker login -u hatamiarash7 -p "${{ secrets.GITHUB_TOKEN }}" ghcr.io
+          docker push ${{ steps.github-image.outputs.lowercase }}
