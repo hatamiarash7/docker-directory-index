@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM nginx:1.20
 
 ARG DATE_CREATED
 
