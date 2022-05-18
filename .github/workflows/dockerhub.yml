@@ -35,18 +35,12 @@ jobs:
         with:
           driver-opts: network=host
 
-      - name: test
-        run: |
-          echo ${{ env.TEST_IMAGE_NAME }}
-          echo ${{ env.IMAGE_NAME }}
-          echo localhost:5000/$IMAGE_NAME
-
       - name: Build and push to local registry
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ env.TEST_IMAGE_NAME }}
+          tags: "${{ env.TEST_IMAGE_NAME }}"
 
       - name: Trivy
         uses: aquasecurity/trivy-action@master
