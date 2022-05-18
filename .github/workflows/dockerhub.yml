@@ -12,23 +12,9 @@ env:
   TEST_IMAGE_NAME: localhost:5000/$IMAGE_NAME
 
 jobs:
-  init:
-    name: Initialize
-    runs-on: ubuntu-latest
-    outputs:
-      containerUser: ${{ steps.get-user.outputs.containerUser }}
-
-    steps:
-      - id: get-user
-        run: echo "::set-output name=containerUser::`id -u`:`id -g`"
-
   test:
     name: Test
     runs-on: ubuntu-latest
-    needs: init
-    container:
-      image: gitguardian/ggshield:latest
-      options: --user ${{ needs.init.outputs.containerUser }}
     services:
       registry:
         image: registry:2
@@ -54,10 +40,6 @@ jobs:
           context: .
           push: true
           tags: ${{ env.TEST_IMAGE_NAME }}
-
-      - name: GitGuardian
-        run: |
-          ggshield scan docker ${{ env.TEST_IMAGE_NAME }}
 
       - name: Trivy
         uses: aquasecurity/trivy-action@master
