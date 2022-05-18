@@ -15,7 +15,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     env:
-      TEST_IMAGE_NAME: localhost:5000/$IMAGE_NAME
+      TEST_IMAGE_NAME: localhost:5000/test:latest
     services:
       registry:
         image: registry:2
