@@ -2,7 +2,7 @@ FROM --platform=$BUILDPLATFORM nginx:1.29
 
 ARG APP_VERSION="undefined@docker"
 ARG DATE_CREATED
-ENV TINI_VERSION v0.19.0
+ENV TINI_VERSION=v0.19.0
 
 LABEL org.opencontainers.image.title="Directory Index"
 LABEL org.opencontainers.image.description="Directory index using Nginx"
@@ -24,4 +24,4 @@ EXPOSE 80
 
 ENTRYPOINT ["/tini", "--"]
 
-CMD /bin/bash -c "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+CMD ["/bin/bash", "-c", "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
