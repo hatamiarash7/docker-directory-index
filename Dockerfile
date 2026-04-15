@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM nginx:1.29
+FROM --platform=$BUILDPLATFORM nginx:1.30
 
 ARG APP_VERSION="undefined@docker"
 ARG DATE_CREATED
