@@ -1,17 +1,37 @@
 server {
-    listen       80;
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
     server_tokens off;
- 
+    # Keep redirects usable behind published ports and reverse proxies.
+    absolute_redirect off;
+
     location = /health {
+        access_log off;
         types {}
         default_type text/plain;
+        add_header Cache-Control "no-store" always;
         return 200 "OK";
     }
-    
+
+    # Do not expose dotfiles (including nested .git and .env files).
+    location ~ (^|/)\. {
+        return 404;
+    }
+
     location / {
-       alias /data/;
-       expires -1;
-       autoindex on;
-       default_type text/plain;
+        root /data;
+        autoindex on;
+        autoindex_exact_size on;
+        autoindex_localtime off;
+        disable_symlinks on;
+        try_files $uri $uri/ =404;
+        add_header Cache-Control "no-cache" always;
+        add_header X-Content-Type-Options "nosniff" always;
+
+        # GET also permits HEAD; uploads and other write methods are forbidden.
+        limit_except GET {
+            deny all;
+        }
     }
 }

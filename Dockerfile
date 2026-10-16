@@ -1,27 +1,29 @@
-FROM --platform=$BUILDPLATFORM nginx:1.31
+FROM nginx:1.31.7@sha256:6c3fee1d7a4686ea271e9cc60d9c741cdfbc44ecf11d343025e1cff4c5522f47
 
 ARG APP_VERSION="undefined@docker"
-ARG DATE_CREATED
-ENV TINI_VERSION=v0.19.0
+ARG DATE_CREATED=""
+ARG VCS_REF=""
 
-LABEL org.opencontainers.image.title="Directory Index"
-LABEL org.opencontainers.image.description="Directory index using Nginx"
-LABEL org.opencontainers.image.url="https://github.com/hatamiarash7/docker-directory-index"
-LABEL org.opencontainers.image.source="https://github.com/hatamiarash7/docker-directory-index"
-LABEL org.opencontainers.image.vendor="hatamiarash7"
-LABEL org.opencontainers.image.authors="hatamiarash7"
-LABEL org.opencontainers.version="$APP_VERSION"
-LABEL org.opencontainers.image.created="$DATE_CREATED"
-LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.title="Directory Index" \
+    org.opencontainers.image.description="A read-only directory index served by Nginx" \
+    org.opencontainers.image.url="https://github.com/hatamiarash7/docker-directory-index" \
+    org.opencontainers.image.source="https://github.com/hatamiarash7/docker-directory-index" \
+    org.opencontainers.image.vendor="hatamiarash7" \
+    org.opencontainers.image.authors="hatamiarash7" \
+    org.opencontainers.image.version="$APP_VERSION" \
+    org.opencontainers.image.revision="$VCS_REF" \
+    org.opencontainers.image.created="$DATE_CREATED" \
+    org.opencontainers.image.licenses="MIT"
 
-COPY default.conf.template /etc/nginx/conf.d/
-
-# Add tini
-ADD https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini /tini
-RUN chmod +x /tini
+# The official Nginx entrypoint renders templates from this directory with
+# envsubst before starting Nginx.
+COPY default.conf.template /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
 
-ENTRYPOINT ["/tini", "--"]
+STOPSIGNAL SIGQUIT
 
-CMD ["/bin/bash", "-c", "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD ["curl", "--fail", "--silent", "--show-error", "--noproxy", "*", "--max-time", "3", "--output", "/dev/null", "http://127.0.0.1/health"]
+
+CMD ["nginx", "-g", "daemon off;"]

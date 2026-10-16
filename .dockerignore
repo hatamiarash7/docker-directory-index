@@ -1,3 +1,4 @@
-.git*
-LICENSE
-README.md
+# Keep mounted content, credentials, and local tooling out of the build context.
+**
+!Dockerfile
+!default.conf.template

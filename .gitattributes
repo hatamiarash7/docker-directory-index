@@ -1,2 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Runtime inputs and shell tests must use Linux line endings.
+Dockerfile text eol=lf
+*.template text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf

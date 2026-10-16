@@ -1,0 +1,6 @@
+# Local content for the Compose example must not be committed.
+/public/
+/example-content/
+.env
+.env.*
+*.log
