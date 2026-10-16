@@ -1,16 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended",
+    "docker:pinDigests"
   ],
-  "packageRules": [
-    {
-      "description": "Automerge non-major updates",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true
-    }
+  "enabledManagers": [
+    "dockerfile"
   ]
 }
