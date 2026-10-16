@@ -117,7 +117,7 @@ Only published GitHub releases publish images; a manual run is validation-only. 
 - Optional `DOCKERHUB_USERNAME`: defaults to `hatamiarash7`
 - GitHub Actions permission to write packages for GHCR
 
-GHCR uses the job-scoped `GITHUB_TOKEN` with `packages: write`; a separate `GH_TOKEN` secret is not required. If the GHCR package already exists, grant this repository Actions access to it. SARIF uploads require code scanning to be available for the repository and `security-events: write`.
+GHCR uses the job-scoped `GITHUB_TOKEN` with `packages: write`; a separate `GH_TOKEN` secret is not required. If the GHCR package already exists, grant this repository Actions **write** access to it in the package's settings. SARIF uploads require code scanning to be available for the repository and `security-events: write`.
 
 A release tagged `v1.2.3` publishes `v1.2.3`, `1.2.3`, and `latest`. Non-semantic release tags are also retained. Prereleases receive version tags but never update `latest`. Release builds include SBOM and provenance attestations and publish to both registries. Registry credentials are only used in the release publishing job.
 
