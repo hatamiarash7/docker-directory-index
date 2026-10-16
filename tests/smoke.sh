@@ -42,12 +42,17 @@ port=$(docker inspect --format '{{(index (index .NetworkSettings.Ports "80/tcp")
 base="http://127.0.0.1:$port"
 http=(curl --disable --silent --show-error --noproxy '*' --max-time 5)
 
-for ((attempt = 0; attempt < 30; attempt++)); do
-	if "${http[@]}" --fail "$base/health" >/dev/null 2>&1; then
-		break
-	fi
-	sleep 1
-done
+wait_for_health() {
+	local attempt
+	for ((attempt = 0; attempt < 30; attempt++)); do
+		if "${http[@]}" --fail "$base/health" >/dev/null 2>&1; then
+			return 0
+		fi
+		sleep 1
+	done
+}
+
+wait_for_health
 
 expect_status() {
 	local expected=$1 path=$2 actual
@@ -116,7 +121,8 @@ mkdir "$content/empty"
 container=$(docker run --detach --publish 127.0.0.1::80 --volume "$content/empty:/data:ro" "$image")
 port=$(docker inspect --format '{{(index (index .NetworkSettings.Ports "80/tcp") 0).HostPort}}' "$container")
 base="http://127.0.0.1:$port"
-"${http[@]}" --retry 10 --retry-connrefused --retry-delay 1 --fail "$base/health" >/dev/null
+wait_for_health
+"${http[@]}" --fail "$base/health" >/dev/null
 expect_status 200 /
 printf '<h1>Custom index</h1>\n' >"$content/empty/index.html"
 [[ "$("${http[@]}" --fail "$base/")" == '<h1>Custom index</h1>' ]]
