@@ -1,4 +1,4 @@
-FROM nginx:1.31.7@sha256:6c3fee1d7a4686ea271e9cc60d9c741cdfbc44ecf11d343025e1cff4c5522f47
+FROM nginx:1.31.8@sha256:165ddde8751e75a1c907d24ef10d9f6deb08b57e0fe56caf67512486aff76d82
 
 ARG APP_VERSION="undefined@docker"
 ARG DATE_CREATED=""
